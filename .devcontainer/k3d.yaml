@@ -13,7 +13,7 @@ volumes:
   - server:*
 
 ports:
-- port: 8080:80
+- port: 8080:8086
   nodeFilters:
   - loadbalancer
 

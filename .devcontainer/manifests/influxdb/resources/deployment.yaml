@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+        - name: backend
+          image: influxdb:2.7-alpine
+          ports:
+            - containerPort: 8086
+          volumeMounts:
+            - name: influxdb-data
+              mountPath: /var/lib/influxdb2
+          env:
+            - name: DOCKER_INFLUXDB_INIT_USERNAME
+              value: "admin"
+            - name: DOCKER_INFLUXDB_INIT_PASSWORD
+              value: "admin"
+            - name: DOCKER_INFLUXDB_INIT_ORG
+              value: "kutespaces"
+            - name: DOCKER_INFLUXDB_INIT_BUCKET
+              value: "kutespaces-bucket"
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "0.5"
+      volumes:
+      - name: influxdb-data
+        persistentVolumeClaim:
+          claimName: influxdb-pvc

@@ -26,6 +26,9 @@ main() {
   echo "creating k3d cluster"
   k3d cluster create -c .devcontainer/k3d.yaml
 
+  echo "deploy influxdb"
+  kubectl apply -k .devcontainer/manifests/influxdb/
+
   mkdir -p output
   cat ~/.kube/config > output/kubeconfig.yaml
 
